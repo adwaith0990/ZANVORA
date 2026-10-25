@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zanvora – Tested electronics, resold</title>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f4;--surface:#fff;--ink:#14202b;--mute:#5b6875;--line:#d3dae1;--accent:#2447f5;--accent-ink:#fff;--a:#1f9d63;--b:#c98a00;--c:#b4492f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10161c;--surface:#18212a;--ink:#e8edf2;--mute:#93a0ad;--line:#2a3541;--accent:#6f8bff;--accent-ink:#0b1020;--a:#4cd08e;--b:#e8b13a;--c:#ef8a6e}}
+:root[data-theme="dark"]{--bg:#10161c;--surface:#18212a;--ink:#e8edf2;--mute:#93a0ad;--line:#2a3541;--accent:#6f8bff;--accent-ink:#0b1020;--a:#4cd08e;--b:#e8b13a;--c:#ef8a6e}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3,.brand{font-family:"Familjen Grotesk",system-ui,sans-serif;letter-spacing:-.02em;margin:0}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{font-size:1.4rem;font-weight:700}
+.cartbtn{background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:8px 16px;font-weight:500}
+.hero{padding:48px 0 36px;display:grid;gap:28px;grid-template-columns:1.3fr 1fr;align-items:end}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.02;font-weight:700;max-width:12ch}
+.hero p{color:var(--mute);max-width:46ch;margin:16px 0 0}
+.grades{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:grid;gap:10px;font-size:.92rem}
+.grades b{display:inline-block;min-width:1.7em;text-align:center;color:#fff;border-radius:4px;margin-right:8px;padding:0 6px}
+.gA{background:var(--a)}.gB{background:var(--b)}.gC{background:var(--c)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 0 20px;border-top:1px solid var(--line)}
+.chip{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));padding-bottom:56px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.art{height:150px;display:grid;place-items:center;background:var(--bg)}
+.dev{background:var(--ink);opacity:.88;position:relative}
+.dev[data-k="phone"]{width:56px;height:108px;border-radius:12px}
+.dev[data-k="laptop"]{width:116px;height:74px;border-radius:6px 6px 2px 2px;box-shadow:0 10px 0 -2px var(--mute)}
+.dev[data-k="audio"]{width:92px;height:92px;border-radius:50%;box-shadow:inset 0 0 0 22px var(--bg),inset 0 0 0 26px var(--ink)}
+.dev[data-k="watch"]{width:62px;height:76px;border-radius:16px;box-shadow:0 -22px 0 -14px var(--mute),0 22px 0 -14px var(--mute)}
+.dev[data-k="console"]{width:118px;height:56px;border-radius:28px}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.body h3{font-size:1.05rem}
+.meta{color:var(--mute);font-size:.88rem}
+.row{display:flex;align-items:baseline;justify-content:space-between;margin-top:auto;padding-top:8px}
+.price{font-family:"Familjen Grotesk",sans-serif;font-size:1.35rem;font-weight:700}
+.was{color:var(--mute);text-decoration:line-through;font-size:.85rem;margin-left:6px}
+.grade{color:#fff;font-weight:500;font-size:.8rem;border-radius:4px;padding:1px 8px}
+.add{background:var(--accent);color:var(--accent-ink);border:0;border-radius:4px;padding:9px;font-weight:500}
+.add:disabled{background:var(--line);color:var(--mute);cursor:default}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--surface);border-left:1px solid var(--line);padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;z-index:20}
+aside.open{transform:none}
+@media (prefers-reduced-motion:reduce){aside{transition:none}}
+.lines{flex:1;overflow:auto;margin:14px 0}
+.line{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.line button{background:none;border:0;color:var(--mute);text-decoration:underline;padding:0}
+.empty{color:var(--mute)}
+.total{display:flex;justify-content:space-between;font-weight:500;margin-bottom:12px}
+.order{display:block;text-align:center;background:var(--a);color:#fff;border-radius:4px;padding:11px;text-decoration:none;font-weight:500}
+.order[aria-disabled="true"]{background:var(--line);color:var(--mute);pointer-events:none}
+.close{align-self:flex-end;background:none;border:0;font-size:1.6rem;line-height:1}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mute);font-size:.9rem}
+@media (max-width:720px){.hero{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand">Zanvora</div><button class="cartbtn" id="open" aria-controls="cart">Cart (<span id="count">0</span>)</button></header>
+
+<section class="hero">
+<div>
+<h1>Tested electronics, resold at honest prices.</h1>
+<p>Every item is checked, graded and shipped with a 6-month warranty. What you see in the grade is what you get in the box.</p>
+</div>
+<div class="grades" aria-label="Condition grades">
+<div><b class="gA">A</b>Like new. No visible marks.</div>
+<div><b class="gB">B</b>Light wear. Works perfectly.</div>
+<div><b class="gC">C</b>Visible scratches. Works perfectly, priced lower.</div>
+</div>
+</section>
+
+<div class="bar" id="filters" role="group" aria-label="Filter by category"></div>
+<main class="grid" id="grid"></main>
+
+<footer>Zanvora · Thiruvananthapuram · Replace the sample products, prices and WhatsApp number in the page’s script to make it yours.</footer>
+</div>
+
+<aside id="cart" aria-label="Cart">
+<button class="close" id="close" aria-label="Close cart">×</button>
+<h2>Your cart</h2>
+<div class="lines" id="lines"></div>
+<div class="total"><span>Total</span><span id="total">₹0</span></div>
+<a class="order" id="order" href="#" target="_blank" rel="noopener" aria-disabled="true">Send order on WhatsApp</a>
+</aside>
+
+<script>
+// Edit these: your WhatsApp number (country code, no +) and your stock.
+var WHATSAPP="910000000000";
+var items=[
+{id:1,n:"iPhone 12, 128 GB",k:"phone",c:"Phones",g:"A",p:34500,o:47900,m:"Battery health 91%"},
+{id:2,n:"Galaxy S21, 256 GB",k:"phone",c:"Phones",g:"B",p:27000,o:39000,m:"Battery health 88%"},
+{id:3,n:"Redmi Note 11",k:"phone",c:"Phones",g:"C",p:8500,o:13500,m:"Scratched back panel"},
+{id:4,n:"ThinkPad T14, i5, 16 GB",k:"laptop",c:"Laptops",g:"A",p:36500,o:62000,m:"512 GB SSD, 6 months warranty"},
+{id:5,n:"MacBook Air M1, 8 GB",k:"laptop",c:"Laptops",g:"B",p:49000,o:75000,m:"256 GB, 112 charge cycles"},
+{id:6,n:"Dell Inspiron 15, i3",k:"laptop",c:"Laptops",g:"C",p:17500,o:29000,m:"Worn keyboard, new battery"},
+{id:7,n:"Sony WH-1000XM4",k:"audio",c:"Audio",g:"A",p:12500,o:21000,m:"Case and cable included"},
+{id:8,n:"AirPods Pro, 2nd gen",k:"audio",c:"Audio",g:"B",p:11500,o:17000,m:"Case has light scuffs",sold:true},
+{id:9,n:"Apple Watch SE, 40 mm",k:"watch",c:"Wearables",g:"A",p:15500,o:24000,m:"Battery health 94%"},
+{id:10,n:"PlayStation 4 Slim, 1 TB",k:"console",c:"Gaming",g:"B",p:14500,o:25000,m:"One controller included"}
+];
+var cart=[],cat="All",$=function(i){return document.getElementById(i)};
+var money=function(n){return "₹"+n.toLocaleString("en-IN")};
+
+function filters(){
+  var cats=["All"].concat(items.map(function(i){return i.c}).filter(function(v,i,a){return a.indexOf(v)===i}));
+  $("filters").innerHTML=cats.map(function(c){return '<button class="chip" aria-pressed="'+(c===cat)+'" data-c="'+c+'">'+c+'</button>'}).join("");
+}
+function grid(){
+  $("grid").innerHTML=items.filter(function(i){return cat==="All"||i.c===cat}).map(function(i){
+    var inCart=cart.indexOf(i.id)>-1;
+    return '<article class="card"><div class="art"><div class="dev" data-k="'+i.k+'"></div></div><div class="body">'+
+    '<div><span class="grade g'+i.g+'">Grade '+i.g+'</span></div>'+
+    '<h3>'+i.n+'</h3><div class="meta">'+i.m+'</div>'+
+    '<div class="row"><div><span class="price">'+money(i.p)+'</span><span class="was">'+money(i.o)+'</span></div></div>'+
+    '<button class="add" data-id="'+i.id+'"'+(i.sold||inCart?' disabled':'')+'>'+(i.sold?'Sold out':inCart?'In cart':'Add to cart')+'</button></div></article>';
+  }).join("");
+}
+function drawCart(){
+  var sel=cart.map(function(id){return items.filter(function(i){return i.id===id})[0]});
+  var sum=sel.reduce(function(s,i){return s+i.p},0);
+  $("count").textContent=sel.length;
+  $("total").textContent=money(sum);
+  $("lines").innerHTML=sel.length?sel.map(function(i){return '<div class="line"><span>'+i.n+'<br><span class="meta">Grade '+i.g+' · '+money(i.p)+'</span></span><button data-rm="'+i.id+'">Remove</button></div>'}).join(""):'<p class="empty">Your cart is empty. Add an item to start an order.</p>';
+  var o=$("order");
+  o.setAttribute("aria-disabled",sel.length?"false":"true");
+  var msg="Hi, I’d like to order:\n"+sel.map(function(i){return "• "+i.n+" (Grade "+i.g+") – "+money(i.p)}).join("\n")+"\nTotal: "+money(sum);
+  o.href=sel.length?"https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg):"#";
+  grid();
+}
+document.addEventListener("click",function(e){
+  var t=e.target;
+  if(t.dataset.c){cat=t.dataset.c;filters();grid()}
+  if(t.dataset.id){cart.push(+t.dataset.id);drawCart()}
+  if(t.dataset.rm){cart=cart.filter(function(x){return x!==+t.dataset.rm});drawCart()}
+});
+$("open").onclick=function(){$("cart").classList.add("open")};
+$("close").onclick=function(){$("cart").classList.remove("open")};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")$("cart").classList.remove("open")});
+filters();drawCart();
+</script>
+</body>
+</html>
